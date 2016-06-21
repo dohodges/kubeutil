@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ ! -n "$2" ]
+then
+  echo "Usage: `basename $0` app port [context]"
+  exit 1
+fi 
+
+if [ ! -n "$3" ]
+then
+    RESOURCE=`kubectl get po -l app=$1 -o name | head -n1`
+else
+    RESOURCE=`kubectl --context $3 get po -l app=$1 -o name | head -n1`
+fi
+
+POD=${RESOURCE:4}
+
+if [ ! -n "$3" ]
+then
+    kubectl port-forward $POD $2
+else
+    kubectl --context $3 port-forward $POD $2
+fi

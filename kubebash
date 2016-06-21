@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ ! -n "$1" ]
+then
+  echo "Usage: `basename $0` app [context]"
+  exit 1
+fi 
+
+if [ ! -n "$2" ]
+then
+    RESOURCE=`kubectl get po -l app=$1 -o name | head -n1`
+else
+    RESOURCE=`kubectl --context $2 get po -l app=$1 -o name | head -n1`
+fi
+
+POD=${RESOURCE:4}
+
+if [ ! -n "$2" ]
+then
+    kubectl exec -ti $POD -- bash
+else
+    kubectl --context $2 exec -ti $POD -- bash
+fi
