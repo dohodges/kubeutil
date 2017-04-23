@@ -13,7 +13,7 @@ else
     RESOURCE=`kubectl --context $2 get po -l app=$1 -o name | head -n1`
 fi
 
-POD=${RESOURCE:4}
+POD=${RESOURCE:5}
 
 if [ ! -n "$2" ]
 then
